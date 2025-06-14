@@ -17,7 +17,6 @@ export async function GET() {
       .orderBy(desc(commentsTable.createdAt))
       .all();
     
-    // Convert Date objects to ISO strings for JSON serialization
     const serializedComments = allComments.map(comment => ({
       ...comment,
       createdAt: comment.createdAt instanceof Date ? comment.createdAt.toISOString() : String(comment.createdAt),
@@ -25,10 +24,10 @@ export async function GET() {
 
     return NextResponse.json(serializedComments);
   } catch (error) {
-    console.error("GET /api/comments error:", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    const errorDetails = error instanceof Error ? `${error.name}: ${error.message} (Stack: ${error.stack})` : "An unknown error occurred";
+    console.error("GET /api/comments error:", errorDetails);
     return NextResponse.json(
-      { message: "Internal Server Error", error: errorMessage },
+      { message: "Internal Server Error while fetching comments.", error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
@@ -50,29 +49,26 @@ export async function POST(request: NextRequest) {
 
     const newCommentData: InsertComment = {
       content,
-      // createdAt will be set by default in the database
     };
 
     const insertedComment = await db.insert(commentsTable).values(newCommentData).returning().get();
     
     if (!insertedComment) {
+      console.error("POST /api/comments - Failed to insert or retrieve comment. Drizzle 'returning()' might have yielded undefined.");
       throw new Error("Failed to insert comment or retrieve the inserted comment.");
     }
     
-    // Logic to delete oldest comments if count exceeds threshold
     const COMMENTS_DELETION_THRESHOLD = 16; 
     const NUM_COMMENTS_TO_DELETE = 5;
 
     const allCommentsCountResult = await db.select({ count: count() }).from(commentsTable).get();
     const totalComments = allCommentsCountResult?.count ?? 0;
 
-    // Check if threshold is met *after* inserting the new comment.
-    // If the new comment makes the total 16 (or more), then delete.
     if (totalComments >= COMMENTS_DELETION_THRESHOLD) {
       const oldestCommentsToDelete = await db
         .select({ id: commentsTable.id })
         .from(commentsTable)
-        .orderBy(asc(commentsTable.createdAt)) // Oldest first
+        .orderBy(asc(commentsTable.createdAt)) 
         .limit(NUM_COMMENTS_TO_DELETE);
 
       if (oldestCommentsToDelete.length > 0) {
@@ -89,12 +85,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(newCommentResponse, { status: 201 });
   } catch (error) {
-    console.error("POST /api/comments error:", error);
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    const errorDetails = error instanceof Error ? `${error.name}: ${error.message} (Stack: ${error.stack})` : "An unknown error occurred";
+    console.error("POST /api/comments error:", errorDetails);
     return NextResponse.json(
-      { message: "Could not post comment.", error: errorMessage },
+      { message: "Could not post comment due to an internal server error.", error: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
 }
-
