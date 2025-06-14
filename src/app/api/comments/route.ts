@@ -1,8 +1,9 @@
+
 import { NextResponse, type NextRequest } from 'next/server';
 import { db } from '@/db';
 import { commentsTable, type InsertComment } from '@/db/schema';
 import { z } from 'zod';
-import { desc } from 'drizzle-orm';
+import { desc, count, asc, inArray } from 'drizzle-orm';
 
 const postCommentSchema = z.object({
   content: z.string().min(1, { message: "Content cannot be empty." }).max(1000, { message: "Content too long." }),
@@ -52,19 +53,39 @@ export async function POST(request: NextRequest) {
       // createdAt will be set by default in the database
     };
 
-    const insertedComments = await db.insert(commentsTable).values(newCommentData).returning().get();
+    const insertedComment = await db.insert(commentsTable).values(newCommentData).returning().get();
     
-    if (!insertedComments) {
+    if (!insertedComment) {
       throw new Error("Failed to insert comment or retrieve the inserted comment.");
     }
     
-    const newComment = {
-      ...insertedComments,
-      createdAt: insertedComments.createdAt instanceof Date ? insertedComments.createdAt.toISOString() : String(insertedComments.createdAt),
+    // Logic to delete oldest comments if count exceeds threshold
+    const COMMENTS_DELETION_THRESHOLD = 16;
+    const NUM_COMMENTS_TO_DELETE = 5;
+
+    const allCommentsCountResult = await db.select({ count: count() }).from(commentsTable).get();
+    const totalComments = allCommentsCountResult?.count ?? 0;
+
+    if (totalComments >= COMMENTS_DELETION_THRESHOLD) {
+      const oldestCommentsToDelete = await db
+        .select({ id: commentsTable.id })
+        .from(commentsTable)
+        .orderBy(asc(commentsTable.createdAt)) // Oldest first
+        .limit(NUM_COMMENTS_TO_DELETE);
+
+      if (oldestCommentsToDelete.length > 0) {
+        const idsToDelete = oldestCommentsToDelete.map(c => c.id);
+        await db.delete(commentsTable).where(inArray(commentsTable.id, idsToDelete));
+        console.log(`Deleted ${idsToDelete.length} oldest comments as total count (${totalComments}) met or exceeded threshold (${COMMENTS_DELETION_THRESHOLD}).`);
+      }
+    }
+    
+    const newCommentResponse = {
+      ...insertedComment,
+      createdAt: insertedComment.createdAt instanceof Date ? insertedComment.createdAt.toISOString() : String(insertedComment.createdAt),
     };
 
-
-    return NextResponse.json(newComment, { status: 201 });
+    return NextResponse.json(newCommentResponse, { status: 201 });
   } catch (error) {
     console.error("POST /api/comments error:", error);
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
