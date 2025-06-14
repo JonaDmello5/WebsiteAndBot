@@ -203,7 +203,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <Header title="AdPublisher" />
+      <Header title="ClickSynergy" />
       <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8 max-w-screen-xl">
         <div className="flex flex-col lg:flex-row gap-8">
           <section className="lg:w-2/3 flex flex-col gap-8">
@@ -304,7 +304,7 @@ export default function HomePage() {
               </CardHeader>
               <CardContent className="p-0">
                 <CardDescription>
-                  AdPublisher is dedicated to helping content creators maximize their ad revenue through optimized content and strategic ad placements.
+                  ClickSynergy is dedicated to helping content creators maximize their ad revenue through optimized content and strategic ad placements.
                 </CardDescription>
               </CardContent>
             </Card>

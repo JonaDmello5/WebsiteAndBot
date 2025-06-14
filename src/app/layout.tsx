@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'AdPublisher',
+  title: 'ClickSynergy',
   description: 'Content platform optimized for ad revenue.',
 };
 

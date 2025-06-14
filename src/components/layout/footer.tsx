@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
     <footer className="bg-card shadow-md mt-auto">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-muted-foreground">
         <p className="text-sm">
-          &copy; {new Date().getFullYear()} AdPublisher. All rights reserved.
+          &copy; {new Date().getFullYear()} ClickSynergy. All rights reserved.
         </p>
         <p className="text-sm mt-1">
           Contact: <a href="mailto:jonadmello6@gmail.com" className="text-primary hover:underline">jonadmello6@gmail.com</a>

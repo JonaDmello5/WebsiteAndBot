@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export default function PrivacyPolicyPage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
-      <Header title="AdPublisher" />
+      <Header title="ClickSynergy" />
       <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8 max-w-screen-md">
         <Card className="shadow-lg">
           <CardHeader>
@@ -15,7 +15,7 @@ export default function PrivacyPolicyPage() {
             <p><strong>Last Updated: {new Date().toLocaleDateString()}</strong></p>
             
             <h2>1. Introduction</h2>
-            <p>Welcome to AdPublisher. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
+            <p>Welcome to ClickSynergy. We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
 
             <h2>2. Information We Collect</h2>
             <p>We may collect personal information such as your name and email address if you voluntarily provide it to us (e.g., by contacting us). We may also collect non-personal information, such as browser type, operating system, and website usage data through cookies and other tracking technologies.</p>
