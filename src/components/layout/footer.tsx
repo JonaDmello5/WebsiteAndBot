@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
           &copy; {new Date().getFullYear()} AdPublisher. All rights reserved.
         </p>
         <p className="text-sm mt-1">
-          Contact: <a href="mailto:contact@adpublisher.com" className="text-primary hover:underline">contact@adpublisher.com</a>
+          Contact: <a href="mailto:jonadmello6@gmail.com" className="text-primary hover:underline">jonadmello6@gmail.com</a>
         </p>
         <nav className="mt-2">
           <Link href="/privacy-policy" className="text-sm text-primary hover:underline mx-2">

@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
             <p>Any claim relating to AdPublisher's Website shall be governed by the laws of the jurisdiction of AdPublisher's owner without regard to its conflict of law provisions.</p>
 
             <h2>10. Contact Us</h2>
-            <p>If you have any questions about these Terms of Service, please contact us at: <a href="mailto:contact@adpublisher.com">contact@adpublisher.com</a>.</p>
+            <p>If you have any questions about these Terms of Service, please contact us at: <a href="mailto:jonadmello6@gmail.com">jonadmello6@gmail.com</a>.</p>
           </CardContent>
         </Card>
       </main>
