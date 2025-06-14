@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Logic to delete oldest comments if count exceeds threshold
-    const COMMENTS_DELETION_THRESHOLD = 16; // Post 16th comment, delete 5 oldest
+    const COMMENTS_DELETION_THRESHOLD = 16; 
     const NUM_COMMENTS_TO_DELETE = 5;
 
     const allCommentsCountResult = await db.select({ count: count() }).from(commentsTable).get();
@@ -97,3 +97,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
