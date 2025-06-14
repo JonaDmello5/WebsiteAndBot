@@ -30,7 +30,7 @@ const sampleArticles = [
         <p>We'll examine case studies of successful monetization strategies and discuss the ethical considerations that come with them. The goal is to provide a comprehensive overview for anyone looking to maximize their online earnings while maintaining a positive user experience.</p>
       </>
     ),
-    imageUrl: "https://placehold.co/800x400.png",
+    imageUrl: "https://placehold.co/700x350.png",
     imageHint: "digital monetization",
     date: "October 26, 2023",
     chart: <SampleBarChart />,
@@ -184,6 +184,8 @@ export default function HomePage() {
         setComments(prevComments => [postedComment, ...prevComments]);
         setNewComment('');
         toast({ title: "Comment posted successfully!", variant: "default" });
+        // After posting, refresh comments to reflect potential deletions due to threshold
+        safeFetchComments(); 
       } else {
         throw new Error("Failed to process comment post response.");
       }
